@@ -58,11 +58,11 @@ void GazeboControllerInterface::Load(physics::ModelPtr _model, sdf::ElementPtr _
   updateConnection_ = event::Events::ConnectWorldUpdateBegin(
       boost::bind(&GazeboControllerInterface::OnUpdate, this, _1));
 
-  cmd_motor_sub_ = node_handle_->subscribe(command_motor_speed_sub_topic_, 10,
+  cmd_motor_sub_ = node_handle_->subscribe(command_motor_speed_sub_topic_, 1,
                                            &GazeboControllerInterface::CommandMotorCallback,
                                            this);
 
-  motor_velocity_reference_pub_ = node_handle_->advertise<mav_msgs::CommandMotorSpeed>(motor_velocity_reference_pub_topic_, 10);
+  motor_velocity_reference_pub_ = node_handle_->advertise<mav_msgs::Actuators>(motor_velocity_reference_pub_topic_, 1);
 }
 
 // This gets called by the world update start event.
@@ -74,10 +74,10 @@ void GazeboControllerInterface::OnUpdate(const common::UpdateInfo& /*_info*/) {
 
   common::Time now = world_->GetSimTime();
 
-  mav_msgs::CommandMotorSpeedPtr turning_velocities_msg(new mav_msgs::CommandMotorSpeed);
+  mav_msgs::ActuatorsPtr turning_velocities_msg(new mav_msgs::Actuators);
 
   for (int i = 0; i < input_reference_.size(); i++) {
-    turning_velocities_msg->motor_speed.push_back(input_reference_[i]);
+    turning_velocities_msg->angular_velocities.push_back(input_reference_[i]);
   }
   turning_velocities_msg->header.stamp.sec = now.sec;
   turning_velocities_msg->header.stamp.nsec = now.nsec;
@@ -85,10 +85,10 @@ void GazeboControllerInterface::OnUpdate(const common::UpdateInfo& /*_info*/) {
   motor_velocity_reference_pub_.publish(turning_velocities_msg);
 }
 
-void GazeboControllerInterface::CommandMotorCallback(const mav_msgs::CommandMotorSpeedPtr& input_reference_msg) {
-  input_reference_.resize(input_reference_msg->motor_speed.size());
-  for (int i = 0; i < input_reference_msg->motor_speed.size(); ++i) {
-    input_reference_[i] = input_reference_msg->motor_speed[i];
+void GazeboControllerInterface::CommandMotorCallback(const mav_msgs::ActuatorsConstPtr& input_reference_msg) {
+  input_reference_.resize(input_reference_msg->angular_velocities.size());
+  for (int i = 0; i < input_reference_msg->angular_velocities.size(); ++i) {
+    input_reference_[i] = input_reference_msg->angular_velocities[i];
   }
   received_first_reference_ = true;
 }
