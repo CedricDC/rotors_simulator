@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+
+<launch>
+  <node name="complete_waypoint_publisher_file_joystick" pkg="rotors_gazebo" type="complete_waypoint_publisher_file_joystick" respawn="false" output="screen">
+    <param name="file_Start" value="$(find rotors_gazebo)/resource/tilted_window/hover.txt" />
+    <param name="file_Back" value="$(find rotors_gazebo)/resource/tilted_window/land.txt" />
+    <param name="file_LB" value="$(find rotors_gazebo)/resource/tilted_window/left.txt" />
+    <param name="file_RB" value="$(find rotors_gazebo)/resource/tilted_window/right.txt" />
+    <param name="file_X" value="$(find rotors_gazebo)/resource/tilted_window/center.txt" />
+  </node>
+</launch>
