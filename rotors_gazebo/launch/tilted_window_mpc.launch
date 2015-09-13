@@ -8,5 +8,6 @@
     <param name="file_LB" value="$(find rotors_gazebo)/resource/tilted_window/left.txt" />
     <param name="file_RB" value="$(find rotors_gazebo)/resource/tilted_window/right.txt" />
     <param name="file_X" value="$(find rotors_gazebo)/resource/tilted_window/center.txt" />
+    <param name="file_A" value="$(find rotors_gazebo)/resource/tilted_window/center_back.txt" />
   </node>
 </launch>
